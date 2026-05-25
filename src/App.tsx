@@ -472,7 +472,7 @@ export default function App() {
         <div
           className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center cursor-pointer pointer-events-auto select-none group"
           onClick={() => {
-            document.getElementById("white-sensory-page")?.scrollIntoView({ behavior: "smooth" });
+            document.getElementById("empty-transitional-page")?.scrollIntoView({ behavior: "smooth" });
           }}
         >
           <span 
@@ -488,6 +488,46 @@ export default function App() {
           </span>
         </div>
         </motion.div>
+      </section>
+
+      {/* Elegant Minimalist White Transitional Section (Slightly more than half-view size, pure white) */}
+      <section 
+        id="empty-transitional-page" 
+        className="relative w-full h-[60vh] bg-white snap-start snap-always shrink-0 flex flex-col items-center justify-center px-6"
+      >
+        <div className="flex flex-col items-center justify-center text-center max-w-xl select-none">
+          {/* Centered Brand Name NYM in Black */}
+          <span className="font-serif text-2xl sm:text-4xl tracking-[0.55em] font-bold uppercase text-stone-950 mr-[-0.55em] leading-none">
+            NYM
+          </span>
+
+          {/* Golden styled PERFUMES subtitle underneath */}
+          <div className="flex items-center gap-3 mt-4">
+            <span 
+              className="h-[1.5px] w-6 sm:w-8 block" 
+              style={{
+                backgroundImage: "linear-gradient(90deg, #bf953f 0%, #fcf6ba 50%, #aa771c 100%)"
+              }}
+            />
+            <span className="font-sub text-[8px] sm:text-[9px] tracking-[0.5em] font-medium uppercase text-stone-600 mr-[-0.5em] leading-none">
+              PERFUMES
+            </span>
+            <span 
+              className="h-[1.5px] w-6 sm:w-8 block" 
+              style={{
+                backgroundImage: "linear-gradient(90deg, #aa771c 0%, #fcf6ba 50%, #bf953f 100%)"
+              }}
+            />
+          </div>
+
+          {/* Thin minimalist line like image design */}
+          <div className="w-12 h-[1px] bg-stone-200 my-6" />
+
+          {/* Subtitle: the essence that feels unreal */}
+          <span className="font-sub text-[8.5px] sm:text-[9.5px] md:text-[10.5px] text-stone-500 tracking-[0.45em] uppercase font-light">
+            the essence that feels unreal
+          </span>
+        </div>
       </section>
 
       {/* Pristine Luxury White Section (Page 2) */}
@@ -631,6 +671,91 @@ export default function App() {
           </div>
           <span className="font-sub text-[8px] tracking-[0.4em] text-stone-600 select-none uppercase font-bold">Return to Top</span>
         </motion.div>
+        </div>
+      </section>
+
+      {/* 2-Page Sized Pure White Section (Below Page 3, styled with custom luxury typography and a full-page image) */}
+      <section 
+        id="additional-empty-white-page" 
+        className="relative w-full h-[200vh] bg-white snap-start snap-always shrink-0 flex flex-col justify-between"
+      >
+        {/* First Half (100vh): Pure typography space */}
+        <div className="w-full h-[100vh] flex flex-col items-center justify-center pt-24 sm:pt-32 px-6">
+          <div className="flex flex-col items-center text-center max-w-4xl select-none">
+            {/* First line: Black, Heavy, Sans-Serif (Montserrat) */}
+            <h2 className="font-sub font-black text-4xl sm:text-6xl md:text-7xl lg:text-[5.5rem] text-stone-950 tracking-[-0.04em] leading-[0.95] uppercase">
+              SEE WHAT OTHER'S
+            </h2>
+
+            {/* Second line: Heavy, Light Silver Gray with Dot, Sans-Serif (Montserrat) */}
+            <h3 
+              className="font-sub font-black text-4xl sm:text-6xl md:text-7xl lg:text-[5.5rem] tracking-[-0.04em] leading-[0.95] uppercase mt-2 bg-clip-text text-transparent"
+              style={{
+                backgroundImage: "linear-gradient(135deg, #e5e7eb 0%, #cbd5e1 50%, #94a3b8 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              SERVICES.
+            </h3>
+
+            {/* Lower refined paragraph sub-text */}
+            <p className="mt-16 sm:mt-20 md:mt-24 font-sub text-stone-500 font-light text-sm sm:text-base md:text-lg leading-relaxed tracking-widest max-w-2xl px-4">
+              We believe that simplicity is the height of sophistication.
+              <br />
+              Every bespoke consultation is an intention, every pure space is a breath.
+            </p>
+          </div>
+        </div>
+
+        {/* Second Half (100vh): High-fashion full page image covering the entire 100vh page */}
+        <div className="w-full h-[100vh] relative overflow-hidden shrink-0">
+          <motion.img 
+            src="https://res.cloudinary.com/dilgatlft/image/upload/v1779684374/ChatGPT_Image_May_25_2026_10_15_24_AM_jqxt8x.png"
+            alt="Luxury Services Campaign Image"
+            className="w-full h-full object-cover object-center block"
+            initial={{ opacity: 0, scale: 1.05 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, margin: "-10%" }}
+            transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1] }}
+            referrerPolicy="no-referrer"
+          />
+          
+          {/* Dior-inspired luxury text overlay: elegant spacing, pristine typography, absolute layout */}
+          <div className="absolute inset-0 flex flex-col items-center justify-end pb-24 sm:pb-32 bg-black/10 z-20">
+            <motion.div
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-10%" }}
+              transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-col items-center text-center px-6 select-none"
+            >
+              {/* Category Subtitle like 'Men's Fall 2026' */}
+              <span className="font-sub text-[10px] sm:text-[11px] md:text-[12px] text-white/95 tracking-[0.45em] uppercase font-light mb-3 block">
+                Bespoke Atelier
+              </span>
+
+              {/* Main Title 'Create Your Own Fragrance' in editorial Serif (Cinzel) resembling the Dior typography */}
+              <h4 className="font-luxury font-light text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] text-white tracking-[0.08em] leading-normal uppercase mb-7 max-w-3xl drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">
+                Create Your Own Fragrance
+              </h4>
+
+              {/* Elegant underlined action option mimicking 'Discover more' */}
+              <motion.button 
+                whileHover={{ y: -1 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setIsModalOpen(true)}
+                className="bg-transparent border-none outline-none cursor-pointer flex flex-col items-center gap-1 group pb-1.5 border-b border-white/60 hover:border-white transition-all duration-300"
+              >
+                <span className="font-sub text-[10px] sm:text-[11px] tracking-[0.3em] text-white font-medium uppercase transition-colors duration-300 group-hover:text-stone-200">
+                  Discover more
+                </span>
+              </motion.button>
+            </motion.div>
+          </div>
+
+          {/* Subtle luxurious ambient overlay */}
+          <div className="absolute inset-0 bg-black/[0.02] pointer-events-none z-10" />
         </div>
       </section>
         </>
