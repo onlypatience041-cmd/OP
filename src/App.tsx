@@ -1,10 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useScroll, useTransform } from "motion/react";
-import { Volume2, VolumeX, ArrowUp, X } from "lucide-react";
+import { Volume2, VolumeX, ArrowUp, X, Compass, Leaf, Gem, Shield } from "lucide-react";
 // @ts-ignore
 import stoneTextureBackground from "./assets/images/stone_texture_bg_1779635081857.png";
 // @ts-ignore
 import perfumesOnRockPlatform from "./assets/images/perfumes_on_rock_platform_1779635840155.png";
+// @ts-ignore
+import nymAboutPerfumeImg from "./assets/images/nym_about_perfume_1779721629774.png";
+// @ts-ignore
+import nBeyondScentImg from "./assets/images/n_beyond_scent_1779721650662.png";
 
 const UNIQUE_HERO_IMAGE = "https://res.cloudinary.com/dilgatlft/image/upload/v1779672639/ChatGPT_Image_May_25_2026_06_59_33_AM_zvnpfb.png";
 
@@ -493,9 +497,15 @@ export default function App() {
       {/* Elegant Minimalist White Transitional Section (Slightly more than half-view size, pure white) */}
       <section 
         id="empty-transitional-page" 
-        className="relative w-full h-[60vh] bg-white snap-start snap-always shrink-0 flex flex-col items-center justify-center px-6"
+        className="relative w-full h-[60vh] bg-white snap-start snap-always shrink-0 flex flex-col items-center justify-center px-6 overflow-hidden"
       >
-        <div className="flex flex-col items-center justify-center text-center max-w-xl select-none">
+        <motion.div 
+          initial={{ opacity: 0, y: 35 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.25 }}
+          transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1] }}
+          className="flex flex-col items-center justify-center text-center max-w-xl select-none"
+        >
           {/* Centered Brand Name NYM in Black */}
           <span className="font-serif text-2xl sm:text-4xl tracking-[0.55em] font-bold uppercase text-stone-950 mr-[-0.55em] leading-none">
             NYM
@@ -503,8 +513,12 @@ export default function App() {
 
           {/* Golden styled PERFUMES subtitle underneath */}
           <div className="flex items-center gap-3 mt-4">
-            <span 
-              className="h-[1.5px] w-6 sm:w-8 block" 
+            <motion.span 
+              initial={{ width: 0 }}
+              whileInView={{ width: "2rem" }}
+              viewport={{ once: false }}
+              transition={{ duration: 1.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+              className="h-[1.5px] block origin-right" 
               style={{
                 backgroundImage: "linear-gradient(90deg, #bf953f 0%, #fcf6ba 50%, #aa771c 100%)"
               }}
@@ -512,8 +526,12 @@ export default function App() {
             <span className="font-sub text-[8px] sm:text-[9px] tracking-[0.5em] font-medium uppercase text-stone-600 mr-[-0.5em] leading-none">
               PERFUMES
             </span>
-            <span 
-              className="h-[1.5px] w-6 sm:w-8 block" 
+            <motion.span 
+              initial={{ width: 0 }}
+              whileInView={{ width: "2rem" }}
+              viewport={{ once: false }}
+              transition={{ duration: 1.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+              className="h-[1.5px] block origin-left" 
               style={{
                 backgroundImage: "linear-gradient(90deg, #aa771c 0%, #fcf6ba 50%, #bf953f 100%)"
               }}
@@ -521,13 +539,25 @@ export default function App() {
           </div>
 
           {/* Thin minimalist line like image design */}
-          <div className="w-12 h-[1px] bg-stone-200 my-6" />
+          <motion.div 
+            initial={{ width: 0 }}
+            whileInView={{ width: "48px" }}
+            viewport={{ once: false }}
+            transition={{ duration: 1.4, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            className="h-[1px] bg-stone-200 my-6" 
+          />
 
           {/* Subtitle: the essence that feels unreal */}
-          <span className="font-sub text-[8.5px] sm:text-[9.5px] md:text-[10.5px] text-stone-500 tracking-[0.45em] uppercase font-light">
+          <motion.span 
+            initial={{ opacity: 0, letterSpacing: "0.2em" }}
+            whileInView={{ opacity: 1, letterSpacing: "0.45em" }}
+            viewport={{ once: false }}
+            transition={{ duration: 1.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            className="font-sub text-[8.5px] sm:text-[9.5px] md:text-[10.5px] text-stone-500 uppercase font-light mr-[-0.45em]"
+          >
             the essence that feels unreal
-          </span>
-        </div>
+          </motion.span>
+        </motion.div>
       </section>
 
       {/* Pristine Luxury White Section (Page 2) */}
@@ -540,8 +570,12 @@ export default function App() {
         <div className="absolute top-6 left-6 right-6 bottom-6 border-[0.5px] border-stone-200/45 pointer-events-none z-30" />
 
         {/* Left Screen: Interactive Cinematic Video (WOMEN CHOICE) */}
-        <div
+        <motion.div
           onClick={triggerSideSliceTransition}
+          initial={{ opacity: 0, x: -70 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: false, amount: 0.1 }}
+          transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
           className="relative w-full md:w-1/2 h-1/2 md:h-full overflow-hidden bg-stone-100 cursor-pointer z-10 group border-b md:border-b-0 md:border-r border-stone-200/50"
           onMouseEnter={() => {
             setVideoHovered(true);
@@ -567,9 +601,10 @@ export default function App() {
           {/* Elegant "Women Choice" Signature Overlay right in the middle (No Rectangular Box) */}
           <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+              initial={{ opacity: 0, scale: 0.92, filter: "blur(4px)" }}
+              whileInView={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+              viewport={{ once: false }}
+              transition={{ duration: 1.5, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
               className="text-center"
             >
               <h3 className="font-signature text-6xl md:text-7xl lg:text-8xl text-white select-none leading-none tracking-wide drop-shadow-[0_4px_16px_rgba(0,0,0,0.65)] capitalize">
@@ -577,11 +612,15 @@ export default function App() {
               </h3>
             </motion.div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Right Screen: Interactive Cinematic Video (MEN CHOICE) */}
-        <div
+        <motion.div
           onClick={triggerSideSliceTransition}
+          initial={{ opacity: 0, x: 70 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: false, amount: 0.1 }}
+          transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
           className="relative w-full md:w-1/2 h-1/2 md:h-full overflow-hidden bg-stone-100 cursor-pointer z-10 group"
           onMouseEnter={() => {
             setMenVideoHovered(true);
@@ -617,7 +656,7 @@ export default function App() {
               </h3>
             </motion.div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Global Floating Sound Controls (z-30) */}
         <div className="absolute top-10 right-10 z-30">
@@ -679,19 +718,30 @@ export default function App() {
         id="additional-empty-white-page" 
         className="relative w-full h-[200vh] bg-white snap-start snap-always shrink-0 flex flex-col justify-between"
       >
-        {/* First Half (100vh): Pure typography space */}
-        <div className="w-full h-[100vh] flex flex-col items-center justify-center pt-24 sm:pt-32 px-6">
-          <div className="flex flex-col items-center text-center max-w-4xl select-none">
-            {/* First line: Black, Heavy, Sans-Serif (Montserrat) */}
-            <h2 className="font-sub font-black text-4xl sm:text-6xl md:text-7xl lg:text-[5.5rem] text-stone-950 tracking-[-0.04em] leading-[0.95] uppercase">
+        {/* First Half (100vh): Pure typography space centered inside an elegant stone-beige rectangular box */}
+        <div className="w-full h-[100vh] flex flex-col items-center justify-center px-4 sm:px-6 md:px-8 bg-white">
+          <motion.div 
+            initial={{ opacity: 0, y: 40, filter: "blur(18px)", scale: 1.05 }}
+            whileInView={{ opacity: 1, y: 0, filter: "blur(0px)", scale: 1 }}
+            viewport={{ once: false, amount: 0.15 }}
+            transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full max-w-5xl min-h-[48vh] sm:min-h-[52vh] bg-[#e6e2de] flex flex-col items-center justify-center px-6 sm:px-12 py-8 sm:py-10 shadow-[0_20px_50px_rgba(0,0,0,0.015)] rounded-[2px] select-none"
+          >
+            {/* Elegant luxury house indicator */}
+            <span className="font-sub text-[9px] sm:text-[10px] text-stone-500/80 tracking-[0.45em] uppercase font-light mb-4 block">
+              The Maison Experience
+            </span>
+
+            {/* First line: Luxury, Light & Aironeous serif (Cinzel) */}
+            <h2 className="font-luxury font-light text-xl sm:text-2xl md:text-3xl lg:text-[2.2rem] text-stone-900 tracking-[0.12em] leading-tight uppercase">
               SEE WHAT OTHER'S
             </h2>
 
-            {/* Second line: Heavy, Light Silver Gray with Dot, Sans-Serif (Montserrat) */}
+            {/* Second line: Luxury, Soft Muted Gold/Taupe serif with Dot (Cinzel) */}
             <h3 
-              className="font-sub font-black text-4xl sm:text-6xl md:text-7xl lg:text-[5.5rem] tracking-[-0.04em] leading-[0.95] uppercase mt-2 bg-clip-text text-transparent"
+              className="font-luxury font-light text-xl sm:text-2xl md:text-3xl lg:text-[2.2rem] tracking-[0.12em] leading-tight uppercase mt-1 bg-clip-text text-transparent"
               style={{
-                backgroundImage: "linear-gradient(135deg, #e5e7eb 0%, #cbd5e1 50%, #94a3b8 100%)",
+                backgroundImage: "linear-gradient(135deg, #78716c 0%, #44403c 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
               }}
@@ -699,13 +749,68 @@ export default function App() {
               SERVICES.
             </h3>
 
-            {/* Lower refined paragraph sub-text */}
-            <p className="mt-16 sm:mt-20 md:mt-24 font-sub text-stone-500 font-light text-sm sm:text-base md:text-lg leading-relaxed tracking-widest max-w-2xl px-4">
+            {/* Silver Stunning Majestic Eagle Crest Design Emblem */}
+            <motion.div 
+              initial={{ opacity: 0, y: 15, scale: 0.9 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1.4, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="my-4 sm:my-5 flex items-center justify-center select-none"
+            >
+              <svg className="w-10 h-10 sm:w-12 sm:h-12 drop-shadow-[0_4px_15px_rgba(168,162,158,0.25)] filter transition-all duration-300 hover:brightness-110 cursor-pointer" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="silver-glossy" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#ffffff" />
+                    <stop offset="25%" stopColor="#f3f4f6" />
+                    <stop offset="50%" stopColor="#9ca3af" />
+                    <stop offset="75%" stopColor="#e5e7eb" />
+                    <stop offset="90%" stopColor="#d1d5db" />
+                    <stop offset="100%" stopColor="#4b5563" />
+                  </linearGradient>
+                  <linearGradient id="silver-accent" x1="100%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#ffffff" />
+                    <stop offset="50%" stopColor="#d1d5db" />
+                    <stop offset="100%" stopColor="#6b7280" />
+                  </linearGradient>
+                </defs>
+                
+                {/* Outer exquisite precision thin ring */}
+                <circle cx="32" cy="32" r="28" stroke="url(#silver-glossy)" strokeWidth="0.75" strokeDasharray="3 3" opacity="0.5" />
+                
+                {/* Symmetrical crescent brand framing lines */}
+                <path d="M 12,32 A 20,20 0 0,0 52,32" stroke="url(#silver-accent)" strokeWidth="0.5" opacity="0.35" />
+                
+                {/* Symmetrical Majestic Eagle Wings & Body */}
+                <path 
+                  d="M32 14 L35 20 L44 16 L39 25 L49 22 L42 29 L54 28 L44 35 L52 37 L42 41 L47 45 L37 45 L32 54 L27 45 L17 45 L22 41 L14 37 L22 35 L12 28 L24 29 L17 22 L27 25 L20 16 L29 20 Z" 
+                  fill="url(#silver-glossy)"
+                  stroke="url(#silver-accent)"
+                  strokeWidth="0.75"
+                  strokeLinejoin="round"
+                />
+                
+                {/* Faceted 3D engraving lines to give a stunning physical feel */}
+                <path d="M32 14 L32 54" stroke="#ffffff" strokeWidth="0.5" opacity="0.6" />
+                <path d="M35 20 L29 20" stroke="#ffffff" strokeWidth="0.5" opacity="0.45" />
+                <path d="M39 25 L25 25" stroke="#ffffff" strokeWidth="0.5" opacity="0.45" />
+                <path d="M42 29 L22 29" stroke="#ffffff" strokeWidth="0.5" opacity="0.45" />
+                <path d="M44 35 L20 35" stroke="#ffffff" strokeWidth="0.5" opacity="0.45" />
+                <path d="M42 41 L22 41" stroke="#ffffff" strokeWidth="0.5" opacity="0.45" />
+                
+                {/* Iconic brand star at the top crest */}
+                <polygon points="32,6 33.5,8 36,8.5 34,10 34.5,12 32,11 29.5,12 30,10 28,8.5 30.5,8" fill="url(#silver-glossy)" />
+              </svg>
+            </motion.div>
+
+            {/* Lower refined paragraph sub-text with exquisite line heights and wide letter spacing */}
+            <p className="mt-2 sm:mt-3 font-sub text-stone-700 font-light text-[9px] sm:text-xs leading-relaxed tracking-[0.18em] max-w-2xl px-4 uppercase text-center">
               We believe that simplicity is the height of sophistication.
               <br />
-              Every bespoke consultation is an intention, every pure space is a breath.
+              <span className="text-stone-500/80 mt-1.5 block">
+                Every bespoke consultation is an intention, every pure space is a breath.
+              </span>
             </p>
-          </div>
+          </motion.div>
         </div>
 
         {/* Second Half (100vh): High-fashion full page image covering the entire 100vh page */}
@@ -714,20 +819,20 @@ export default function App() {
             src="https://res.cloudinary.com/dilgatlft/image/upload/v1779684374/ChatGPT_Image_May_25_2026_10_15_24_AM_jqxt8x.png"
             alt="Luxury Services Campaign Image"
             className="w-full h-full object-cover object-center block"
-            initial={{ opacity: 0, scale: 1.05 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, margin: "-10%" }}
-            transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1] }}
+            initial={{ opacity: 0, scale: 1.12, filter: "brightness(0.6)" }}
+            whileInView={{ opacity: 1, scale: 1.02, filter: "brightness(0.95)" }}
+            viewport={{ once: false, amount: 0.1 }}
+            transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] }}
             referrerPolicy="no-referrer"
           />
           
           {/* Dior-inspired luxury text overlay: elegant spacing, pristine typography, absolute layout */}
           <div className="absolute inset-0 flex flex-col items-center justify-end pb-24 sm:pb-32 bg-black/10 z-20">
             <motion.div
-              initial={{ opacity: 0, y: 25 }}
+              initial={{ opacity: 0, y: 35 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-10%" }}
-              transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+              viewport={{ once: false, amount: 0.15 }}
+              transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
               className="flex flex-col items-center text-center px-6 select-none"
             >
               {/* Category Subtitle like 'Men's Fall 2026' */}
@@ -757,6 +862,298 @@ export default function App() {
           {/* Subtle luxurious ambient overlay */}
           <div className="absolute inset-0 bg-black/[0.02] pointer-events-none z-10" />
         </div>
+      </section>
+
+      {/* Elegant Minimalist White Section: About (Page 5) */}
+      <section 
+        id="about-nym-page" 
+        className="relative w-full h-auto min-h-screen bg-white snap-start snap-always shrink-0 flex flex-col items-center justify-start border-t border-stone-150 z-30 overflow-hidden"
+      >
+        <div className="w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-20 sm:py-28 flex flex-col gap-16 md:gap-24 select-none">
+          
+          {/* Part 1: Hero Header split */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+            {/* Left Column: Context Editorial (col-span 7) */}
+            <motion.div 
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: false, amount: 0.15 }}
+              transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1] }}
+              className="lg:col-span-7 flex flex-col items-start text-left lg:pr-8"
+            >
+              <span className="font-sub text-[10px] sm:text-xs text-[#a8a29e] tracking-[0.45em] uppercase font-light mb-4 block">
+                The Essence of Nym
+              </span>
+              <h2 className="font-luxury font-light text-5xl sm:text-6xl md:text-7xl text-stone-900 tracking-[0.12em] uppercase leading-none mb-6">
+                ABOUT
+              </h2>
+              <div className="w-16 h-[1px] bg-stone-300 my-6" />
+              <h3 className="font-sub text-stone-850 font-medium text-xs sm:text-sm tracking-[0.25em] uppercase leading-relaxed mb-6">
+                CRAFTED IN SILENCE, DEFINED BY SENSORY LUXURY.
+              </h3>
+              <p className="font-sub text-stone-500 font-light text-sm sm:text-base tracking-[0.05em] leading-relaxed max-w-xl">
+                NYM is more than a perfume house — it is an expression of timeless elegance and the art of invisible luxury. Our fragrances are designed to create a bridge between the physical and the sublime, lingering as an whisper on the skin and an imprint on the memory.
+              </p>
+            </motion.div>
+
+            {/* Right Column: Perfume Bottle Mockup (col-span 5) */}
+            <div className="lg:col-span-5 flex justify-center">
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95, y: 35 }}
+                whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                viewport={{ once: false, amount: 0.15 }}
+                transition={{ duration: 1.6, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
+                className="relative aspect-[4/5] w-full max-w-[380px] bg-[#fdfbfa] border border-stone-200 p-2 sm:p-3 shadow-[0_24px_50px_rgba(0,0,0,0.02)] rounded-[1px] overflow-hidden group"
+              >
+                <img 
+                  src={nymAboutPerfumeImg} 
+                  alt="Maison NYM Signature Perfume Presentation" 
+                  className="w-full h-full object-cover rounded-[1px] filter brightness-[0.98] contrast-[1.02] transition-transform duration-700 group-hover:scale-102"
+                  referrerPolicy="no-referrer"
+                />
+                {/* Ambient luxury glass tint overlay */}
+                <div className="absolute inset-0 bg-stone-500/[0.015] pointer-events-none" />
+              </motion.div>
+            </div>
+          </div>
+
+          {/* Part 2: Three Columns Brand Pillars */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 sm:gap-16 border-t border-b border-stone-200/60 py-16">
+            {/* OUR PHILOSOPHY */}
+            <motion.div 
+              initial={{ opacity: 0, y: 35 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: false, amount: 0.15 }}
+              transition={{ duration: 1.3, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-col items-center text-center px-4"
+            >
+              <div className="mb-6 flex items-center justify-center p-3 rounded-full bg-stone-50 border border-stone-100">
+                <svg className="w-8 h-8 stroke-[0.75] text-stone-700" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 7h6M12 3v4M8 7h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z" />
+                  <path strokeLinecap="round" d="M10 13h4M10 17h4" />
+                </svg>
+              </div>
+              <h4 className="font-luxury font-light text-lg sm:text-xl text-stone-900 tracking-[0.2em] uppercase mb-4">
+                OUR PHILOSOPHY
+              </h4>
+              <p className="font-sub text-stone-500 font-light text-xs sm:text-sm tracking-[0.08em] leading-relaxed max-w-xs">
+                We believe true luxury whispers. Every fragrance is a story, crafted with intention and worn as a signature of individuality.
+              </p>
+            </motion.div>
+
+            {/* OUR CRAFT */}
+            <motion.div 
+              initial={{ opacity: 0, y: 35 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: false, amount: 0.15 }}
+              transition={{ duration: 1.3, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-col items-center text-center px-4 md:border-l md:border-r md:border-stone-200/50"
+            >
+              <div className="mb-6 flex items-center justify-center p-3 rounded-full bg-stone-50 border border-stone-100">
+                <svg className="w-8 h-8 stroke-[0.75] text-stone-700" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9 9 0 0 0 0-18 9 9 0 0 0 0 18Z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 3c-1.2 2.5-1.2 5.5 0 8 1.2-2.5 1.2-5.5 0-8ZM12 11c-1.2 2.5-1.2 5.5 0 8 1.2-2.5 1.2-5.5 0-8Z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M7 12c2.5-1.2 5.5-1.2 8 0-2.5 1.2-5.5 1.2-8 0Z" />
+                </svg>
+              </div>
+              <h4 className="font-luxury font-light text-lg sm:text-xl text-stone-900 tracking-[0.2em] uppercase mb-4">
+                OUR CRAFT
+              </h4>
+              <p className="font-sub text-stone-500 font-light text-xs sm:text-sm tracking-[0.08em] leading-relaxed max-w-xs">
+                From the finest raw ingredients to meticulous blending, our artisans create scents that transcend time and trends.
+              </p>
+            </motion.div>
+
+            {/* OUR PROMISE */}
+            <motion.div 
+              initial={{ opacity: 0, y: 35 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: false, amount: 0.15 }}
+              transition={{ duration: 1.3, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-col items-center text-center px-4"
+            >
+              <div className="mb-6 flex items-center justify-center p-3 rounded-full bg-stone-50 border border-stone-100">
+                <svg className="w-8 h-8 stroke-[0.75] text-stone-700" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 3h6M10 3v6l-4 8a2 2 0 0 0 1.7 3h8.6a2 2 0 0 0 1.7-3l-4-8V3" />
+                  <path strokeLinecap="round" d="M8.5 14h7" />
+                </svg>
+              </div>
+              <h4 className="font-luxury font-light text-lg sm:text-xl text-stone-900 tracking-[0.2em] uppercase mb-4">
+                OUR PROMISE
+              </h4>
+              <p className="font-sub text-stone-500 font-light text-xs sm:text-sm tracking-[0.08em] leading-relaxed max-w-xs">
+                To deliver timeless fragrances that evoke emotion, inspire confidence, and celebrate the art of being unforgettable.
+              </p>
+            </motion.div>
+          </div>
+
+          {/* Part 3: BEYOND SCENT Split Banner */}
+          <motion.div 
+            initial={{ opacity: 0, y: 45 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false, amount: 0.1 }}
+            transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1] }}
+            className="grid grid-cols-1 lg:grid-cols-12 gap-0 w-full bg-white border border-stone-200/60 rounded-[1px] overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.015)]"
+          >
+            {/* Left Image Half (col-span 5) */}
+            <div className="lg:col-span-5 h-[280px] md:h-[350px] w-full relative overflow-hidden">
+              <motion.img 
+                src={nBeyondScentImg} 
+                alt="Golden Cap Close-up" 
+                className="w-full h-full object-cover block filter brightness-[0.95]"
+                referrerPolicy="no-referrer"
+                initial={{ scale: 1.08 }}
+                whileInView={{ scale: 1 }}
+                viewport={{ once: false }}
+                transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
+              />
+              {/* Subtle warm luxury tint overlay */}
+              <div className="absolute inset-0 bg-stone-900/10 pointer-events-none" />
+            </div>
+
+            {/* Right Content Half (col-span 7) */}
+            <motion.div 
+              initial={{ opacity: 0, x: 25 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: false }}
+              transition={{ duration: 1.4, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="lg:col-span-7 bg-[#fcfaf7] flex flex-col items-start justify-center p-8 sm:p-12 md:p-16 text-left select-none"
+            >
+              <h4 className="font-luxury font-light text-2xl sm:text-3xl text-stone-900 tracking-[0.16em] uppercase">
+                BEYOND SCENT
+              </h4>
+              <div className="w-12 h-[1px] bg-amber-800/60 my-5" />
+              <p className="font-sub text-stone-600 font-light text-xs sm:text-sm tracking-[0.06em] leading-relaxed mb-8 max-w-md">
+                NYM is an experience — a quiet statement of who you are. Not for everyone. Only for those who understand.
+              </p>
+              {/* Stunning cursive signoff */}
+              <span className="font-signature text-3xl md:text-4xl text-stone-400 font-normal select-none italic capitalize leading-none block">
+                Live in Essence.
+              </span>
+            </motion.div>
+          </motion.div>
+
+          {/* Part 4: Minimal Royal Small-Text Signature Pillars (No bulky cards/icons, dark royal style text) */}
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false, amount: 0.1 }}
+            transition={{ duration: 1.4, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full flex justify-center mt-4 pt-10 border-t border-stone-200/50"
+          >
+            <div className="flex flex-col md:flex-row items-center justify-center gap-y-6 gap-x-10 lg:gap-x-16 text-center">
+              {/* Pillar 1 */}
+              <div className="flex flex-col items-center md:items-start select-none">
+                <div className="flex items-center gap-1.5 justify-center md:justify-start">
+                  <span className="w-1 h-1 rounded-full bg-stone-400" />
+                  <span className="font-luxury text-[9px] sm:text-[10px] tracking-[0.2em] text-stone-900 uppercase font-medium">
+                    FINEST INGREDIENTS
+                  </span>
+                </div>
+                <span className="font-sub text-[8px] sm:text-[9px] tracking-[0.12em] text-stone-500 uppercase mt-0.5 md:pl-2.5">
+                  Sourced from around the world
+                </span>
+              </div>
+
+              {/* Pillar 2 */}
+              <div className="flex flex-col items-center md:items-start md:border-l md:border-stone-200 md:pl-10 select-none">
+                <div className="flex items-center gap-1.5 justify-center md:justify-start">
+                  <span className="w-1 h-1 rounded-full bg-stone-400" />
+                  <span className="font-luxury text-[9px] sm:text-[10px] tracking-[0.2em] text-stone-900 uppercase font-medium">
+                    EXPERTLY CRAFTED
+                  </span>
+                </div>
+                <span className="font-sub text-[8px] sm:text-[9px] tracking-[0.12em] text-stone-500 uppercase mt-0.5 md:pl-2.5">
+                  Blended by master perfumers
+                </span>
+              </div>
+
+              {/* Pillar 3 */}
+              <div className="flex flex-col items-center md:items-start md:border-l md:border-stone-200 md:pl-10 select-none">
+                <div className="flex items-center gap-1.5 justify-center md:justify-start">
+                  <span className="w-1 h-1 rounded-full bg-stone-400" />
+                  <span className="font-luxury text-[9px] sm:text-[10px] tracking-[0.2em] text-stone-900 uppercase font-medium">
+                    TIMELESS ELEGANCE
+                  </span>
+                </div>
+                <span className="font-sub text-[8px] sm:text-[9px] tracking-[0.12em] text-stone-500 uppercase mt-0.5 md:pl-2.5">
+                  Designed for impression
+                </span>
+              </div>
+
+              {/* Pillar 4 */}
+              <div className="flex flex-col items-center md:items-start md:border-l md:border-stone-200 md:pl-10 select-none">
+                <div className="flex items-center gap-1.5 justify-center md:justify-start">
+                  <span className="w-1 h-1 rounded-full bg-stone-400" />
+                  <span className="font-luxury text-[9px] sm:text-[10px] tracking-[0.2em] text-stone-900 uppercase font-medium">
+                    AUTHENTIC LUXURY
+                  </span>
+                </div>
+                <span className="font-sub text-[8px] sm:text-[9px] tracking-[0.12em] text-stone-500 uppercase mt-0.5 md:pl-2.5">
+                  Quality to feel & wear
+                </span>
+              </div>
+            </div>
+          </motion.div>
+
+        </div>
+      </section>
+
+      {/* Elegant Minimalist White Section: Contact (Page 6) */}
+      <section 
+        id="contact-nym-page" 
+        className="relative w-full h-screen bg-white snap-start snap-always shrink-0 flex flex-col items-center justify-center px-6 border-t border-stone-150"
+      >
+        <motion.div 
+          initial={{ opacity: 0, y: 35 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.2 }}
+          transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
+          className="flex flex-col items-center text-center max-w-4xl select-none"
+        >
+          {/* Elegant luxury Maison category subtitle */}
+          <span className="font-sub text-[10px] sm:text-xs text-stone-400 tracking-[0.45em] uppercase font-light mb-5 block">
+            The Atelier Enquiries
+          </span>
+
+          {/* Main Title 'CONTACT' in editorial luxury Serif */}
+          <h2 className="font-luxury font-light text-4xl sm:text-5xl md:text-6xl lg:text-[3.5rem] text-stone-900 tracking-[0.15em] leading-tight uppercase">
+            CONTACT
+          </h2>
+
+          <motion.div 
+            initial={{ width: 0 }}
+            whileInView={{ width: "48px" }}
+            viewport={{ once: false }}
+            transition={{ duration: 1.4, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            className="h-[1px] bg-stone-200 my-8" 
+          />
+
+          {/* Minimal sensory touchpoints info */}
+          <div className="flex flex-col items-center gap-2">
+            <span className="font-sub text-stone-500 font-light text-[10px] sm:text-xs tracking-[0.25em] uppercase">
+              atelier@maison-nym.com
+            </span>
+            <span className="font-sub text-stone-400 font-light text-[9px] tracking-[0.2em] uppercase mt-1">
+              Paris — Milan — New York
+            </span>
+          </div>
+        </motion.div>
+
+        {/* Unified Scroll Return button inside Contact page */}
+        <motion.div 
+          onClick={() => {
+            document.getElementById("hero-section")?.scrollIntoView({ behavior: "smooth" });
+          }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 cursor-pointer flex flex-col items-center gap-1.5 opacity-60 hover:opacity-100 transition-opacity duration-300 z-30"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 0.8 }}
+        >
+          <div className="w-9 h-9 rounded-full bg-stone-50/85 backdrop-blur-md shadow-[0_8px_24px_rgba(0,0,0,0.06)] border border-stone-200/50 flex items-center justify-center">
+            <ArrowUp className="w-4 h-4 text-stone-600" />
+          </div>
+          <span className="font-sub text-[8px] tracking-[0.4em] text-stone-500 select-none uppercase font-bold text-center">Return to Top</span>
+        </motion.div>
       </section>
         </>
       ) : (
@@ -821,10 +1218,10 @@ export default function App() {
               }`}
             >
               <motion.div 
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-120px" }}
-                transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+                initial={{ opacity: 0, y: 55, filter: "blur(12px)" }}
+                whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                viewport={{ once: false, amount: 0.15 }}
+                transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1] }}
                 className="group relative flex flex-col items-center max-w-sm w-full"
               >
                 {/* Matte Ambient Light-shaft behind (Stunning Silver/Grey ambient, non-shining) */}
