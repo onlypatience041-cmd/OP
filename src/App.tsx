@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, ReactNode } from "react";
 import { motion, AnimatePresence, useScroll, useTransform } from "motion/react";
 import { Volume2, VolumeX, ArrowUp, X, Compass, Leaf, Gem, Shield } from "lucide-react";
 // @ts-ignore
@@ -9,18 +9,28 @@ import perfumesOnRockPlatform from "./assets/images/perfumes_on_rock_platform_17
 import nymAboutPerfumeImg from "./assets/images/nym_about_perfume_1779721629774.png";
 // @ts-ignore
 import nBeyondScentImg from "./assets/images/n_beyond_scent_1779721650662.png";
+// @ts-ignore
+import tobaccoLeavesTexture from "./assets/images/tobacco_leaves_texture_1779773730298.png";
+// @ts-ignore
+import grisDiorImg from "./assets/images/gris_dior_product_shot_1779774179662.png";
+// @ts-ignore
+import missDiorImg from "./assets/images/miss_dior_product_shot_1779774198149.png";
+// @ts-ignore
+import sauvageImg from "./assets/images/sauvage_product_shot_1779774211789.png";
+// @ts-ignore
+import jadoreImg from "./assets/images/jadore_product_shot_1779774227430.png";
 
 const UNIQUE_HERO_IMAGE = "https://res.cloudinary.com/dilgatlft/image/upload/v1779672639/ChatGPT_Image_May_25_2026_06_59_33_AM_zvnpfb.png";
 
 const GALLERY_PERFUMES = [
   {
     id: 1,
-    name: "SENSORY COUD",
+    name: "PERFECTION PURITY",
     volume: "100ml",
     type: "Extraits de Cologne",
     liquidColor: "bg-[#252322]/30",
     capColor: "bg-stone-800",
-    label: "SENSORY COUD",
+    label: "PERFECTION PURITY",
     sub: "CHRISTIAN DIOR",
     rockStyle: "rounded-[35%_65%_70%_30%_/_40%_35%_65%_60%] rotate-3 border-stone-800",
     rockBg: "from-stone-900 to-[#121110]",
@@ -99,6 +109,142 @@ const GALLERY_PERFUMES = [
   }
 ];
 
+// ==========================================
+// LUXURIES TYPOGRAPHY ANIMATION COMPONENTS (Maison style)
+// ==========================================
+
+interface LuxuryRevealTextProps {
+  text: string;
+  className?: string;
+  delay?: number;
+  duration?: number;
+}
+
+function LuxuryRevealText({
+  text,
+  className = "",
+  delay = 0,
+  duration = 1.6,
+}: LuxuryRevealTextProps) {
+  const letters = Array.from(text);
+  
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: (customDelay: number) => ({
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.05,
+        delayChildren: customDelay,
+      },
+    }),
+  };
+
+  const letterVariants = {
+    hidden: { 
+      opacity: 0, 
+      y: 15, 
+      filter: "blur(10px)",
+      scale: 0.95,
+    },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      filter: "blur(0px)",
+      scale: 1,
+      transition: {
+        duration: duration,
+        ease: [0.16, 1, 0.3, 1], // Dreamy high-fashion bezier curve
+      },
+    },
+  };
+
+  return (
+    <motion.span
+      variants={containerVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: false, amount: 0.1 }}
+      custom={delay}
+      className={`inline-flex flex-wrap ${className}`}
+    >
+      {letters.map((char, index) => (
+        <motion.span
+          key={index}
+          variants={letterVariants}
+          className={`inline-block ${char === " " ? "w-2 sm:w-3" : ""}`}
+        >
+          {char === " " ? "\u00A0" : char}
+        </motion.span>
+      ))}
+    </motion.span>
+  );
+}
+
+interface LuxuryTrackingTextProps {
+  text: string;
+  className?: string;
+  delay?: number;
+  duration?: number;
+  fromTracking?: string;
+  toTracking?: string;
+}
+
+function LuxuryTrackingText({
+  text,
+  className = "",
+  delay = 0,
+  duration = 1.8,
+  fromTracking = "0.15em",
+  toTracking = "0.45em",
+}: LuxuryTrackingTextProps) {
+  return (
+    <motion.span
+      initial={{ opacity: 0, letterSpacing: fromTracking, filter: "blur(8px)" }}
+      whileInView={{ opacity: 1, letterSpacing: toTracking, filter: "blur(0px)" }}
+      viewport={{ once: false, amount: 0.1 }}
+      transition={{
+        duration: duration,
+        delay: delay,
+        ease: [0.16, 1, 0.3, 1],
+      }}
+      className={`inline-block whitespace-nowrap ${className}`}
+    >
+      {text}
+    </motion.span>
+  );
+}
+
+interface ElegantLineRevealProps {
+  children: ReactNode;
+  delay?: number;
+  duration?: number;
+  className?: string;
+}
+
+function ElegantLineReveal({
+  children,
+  delay = 0,
+  duration = 1.8,
+  className = "",
+}: ElegantLineRevealProps) {
+  return (
+    <div className={`overflow-hidden py-1 ${className}`}>
+      <motion.div
+        initial={{ y: "105%", opacity: 0 }}
+        whileInView={{ y: 0, opacity: 1 }}
+        viewport={{ once: false, amount: 0.15 }}
+        transition={{
+          duration: duration,
+          delay: delay,
+          ease: [0.16, 1, 0.3, 1],
+        }}
+      >
+        {children}
+      </motion.div>
+    </div>
+  );
+}
+
 export default function App() {
   const [index, setIndex] = useState(0);
   const [droplets, setDroplets] = useState<{ id: number; left: number; top: number; delay: number; scale: number; speed: number; xWiggles: number[] }[]>([]);
@@ -106,8 +252,24 @@ export default function App() {
   const [videoHovered, setVideoHovered] = useState(false);
   const [menVideoHovered, setMenVideoHovered] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showGallery, setShowGallery] = useState(false);
+  const [activeCategory, setActiveCategory] = useState<'men' | 'women' | null>(null);
+  const [isSlicing, setIsSlicing] = useState(false);
+  const [slicingPhase, setSlicingPhase] = useState<"idle" | "entering" | "revealed">("idle");
+
   const videoRef = useRef<HTMLVideoElement>(null);
   const menVideoRef = useRef<HTMLVideoElement>(null);
+  const campaignHeroVideoRef = useRef<HTMLVideoElement>(null);
+
+  // Auto-play the campaign hero video under chromium block conditions
+  useEffect(() => {
+    if (activeCategory === "men" && campaignHeroVideoRef.current) {
+      campaignHeroVideoRef.current.muted = true;
+      campaignHeroVideoRef.current.play().catch((err) => {
+        console.log("Campaign autoplay blocked or waiting for user gesture:", err.message);
+      });
+    }
+  }, [activeCategory]);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ container: containerRef });
@@ -120,14 +282,11 @@ export default function App() {
   // Smooth Interpolated Background Gradient to blend the dark first page into light second page
   const bgColor = useTransform(scrollYProgress, [0, 0.35, 1], ["#000000", "#faf9f6", "#faf9f6"]);
 
-  const [showGallery, setShowGallery] = useState(false);
-  const [isSlicing, setIsSlicing] = useState(false);
-  const [slicingPhase, setSlicingPhase] = useState<"idle" | "entering" | "revealed">("idle");
-
-  const triggerSideSliceTransition = () => {
+  const triggerSideSliceTransition = (category: 'men' | 'women') => {
     if (isSlicing) return;
     setIsSlicing(true);
     setSlicingPhase("entering");
+    setActiveCategory(category);
 
     // Switch to gallery view when panels have fully swept the viewport
     setTimeout(() => {
@@ -265,11 +424,11 @@ export default function App() {
               <span className="font-sub text-[11px] sm:text-xs md:text-sm text-white/90 tracking-widest font-light">
                 (2026©)
               </span>
-              <span className="font-sub text-[11px] sm:text-xs md:text-sm text-white/95 tracking-[0.4em] sm:tracking-[0.55em] uppercase font-light text-center">
-                LUXURY AND MINIMALIST
+              <span className="font-sub text-[11px] sm:text-xs md:text-sm text-white/95 uppercase font-light text-center">
+                <LuxuryTrackingText text="LUXURY AND MINIMALIST" fromTracking="0.3em" toTracking="0.55em" duration={2.2} />
               </span>
-              <span className="font-sub text-[10px] sm:text-[11px] md:text-xs text-white/70 tracking-[0.35em] uppercase font-light text-center">
-                SANS SERIF FONT
+              <span className="font-sub text-[10px] sm:text-[11px] md:text-xs text-white/70 uppercase font-light text-center">
+                <LuxuryTrackingText text="SANS SERIF FONT" fromTracking="0.2em" toTracking="0.35em" delay={0.2} duration={2.2} />
               </span>
             </div>
           </div>
@@ -548,22 +707,21 @@ export default function App() {
           />
 
           {/* Subtitle: the essence that feels unreal */}
-          <motion.span 
-            initial={{ opacity: 0, letterSpacing: "0.2em" }}
-            whileInView={{ opacity: 1, letterSpacing: "0.45em" }}
-            viewport={{ once: false }}
-            transition={{ duration: 1.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          <LuxuryTrackingText 
+            text="THE ESSENCE THAT FEELS UNREAL" 
             className="font-sub text-[8.5px] sm:text-[9.5px] md:text-[10.5px] text-stone-500 uppercase font-light mr-[-0.45em]"
-          >
-            the essence that feels unreal
-          </motion.span>
+            fromTracking="0.2em"
+            toTracking="0.45em"
+            duration={2.0}
+            delay={0.25}
+          />
         </motion.div>
       </section>
 
       {/* Pristine Luxury White Section (Page 2) */}
       <section 
         id="white-sensory-page" 
-        className="relative w-full h-screen text-[#1c1917] snap-start snap-always shrink-0 overflow-hidden select-none"
+        className="relative w-full h-[125vh] text-[#1c1917] snap-start snap-always shrink-0 overflow-hidden select-none"
       >
         <div className="w-full h-full flex flex-col md:flex-row bg-[#faf9f6] relative">
         {/* Decorative ultra-thin luxury borders wrapped around the section */}
@@ -571,7 +729,7 @@ export default function App() {
 
         {/* Left Screen: Interactive Cinematic Video (WOMEN CHOICE) */}
         <motion.div
-          onClick={triggerSideSliceTransition}
+          onClick={() => triggerSideSliceTransition("women")}
           initial={{ opacity: 0, x: -70 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: false, amount: 0.1 }}
@@ -592,6 +750,7 @@ export default function App() {
             loop
             muted={isMuted}
             playsInline
+            referrerPolicy="no-referrer"
             className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
           />
 
@@ -616,7 +775,7 @@ export default function App() {
 
         {/* Right Screen: Interactive Cinematic Video (MEN CHOICE) */}
         <motion.div
-          onClick={triggerSideSliceTransition}
+          onClick={() => triggerSideSliceTransition("men")}
           initial={{ opacity: 0, x: 70 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: false, amount: 0.1 }}
@@ -637,6 +796,7 @@ export default function App() {
             loop
             muted={isMuted}
             playsInline
+            referrerPolicy="no-referrer"
             className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
           />
 
@@ -728,13 +888,13 @@ export default function App() {
             className="w-full max-w-5xl min-h-[48vh] sm:min-h-[52vh] bg-[#e6e2de] flex flex-col items-center justify-center px-6 sm:px-12 py-8 sm:py-10 shadow-[0_20px_50px_rgba(0,0,0,0.015)] rounded-[2px] select-none"
           >
             {/* Elegant luxury house indicator */}
-            <span className="font-sub text-[9px] sm:text-[10px] text-stone-500/80 tracking-[0.45em] uppercase font-light mb-4 block">
-              The Maison Experience
+            <span className="font-sub text-[9px] sm:text-[10px] text-stone-500/80 uppercase font-light mb-4 block">
+              <LuxuryTrackingText text="THE MAISON EXPERIENCE" fromTracking="0.25em" toTracking="0.45em" />
             </span>
 
             {/* First line: Luxury, Light & Aironeous serif (Cinzel) */}
             <h2 className="font-luxury font-light text-xl sm:text-2xl md:text-3xl lg:text-[2.2rem] text-stone-900 tracking-[0.12em] leading-tight uppercase">
-              SEE WHAT OTHER'S
+              <LuxuryRevealText text="SEE WHAT OTHER'S" duration={1.6} />
             </h2>
 
             {/* Second line: Luxury, Soft Muted Gold/Taupe serif with Dot (Cinzel) */}
@@ -746,7 +906,7 @@ export default function App() {
                 WebkitTextFillColor: "transparent",
               }}
             >
-              SERVICES.
+              <LuxuryRevealText text="SERVICES." delay={0.4} duration={1.6} />
             </h3>
 
             {/* Silver Stunning Majestic Eagle Crest Design Emblem */}
@@ -863,237 +1023,232 @@ export default function App() {
           <div className="absolute inset-0 bg-black/[0.02] pointer-events-none z-10" />
         </div>
       </section>
-
-      {/* Elegant Minimalist White Section: About (Page 5) */}
+      {/* Editorial Luxury About Page 1: The Origin & Spirit (Page 5) */}
       <section 
-        id="about-nym-page" 
-        className="relative w-full h-auto min-h-screen bg-white snap-start snap-always shrink-0 flex flex-col items-center justify-start border-t border-stone-150 z-30 overflow-hidden"
+        id="about-nym-part-1" 
+        className="relative w-full h-screen bg-white snap-start snap-always shrink-0 flex flex-col items-center justify-center border-t border-stone-150 z-30 overflow-hidden"
       >
-        <div className="w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-20 sm:py-28 flex flex-col gap-16 md:gap-24 select-none">
-          
-          {/* Part 1: Hero Header split */}
+        {/* Subtle, pale structural background markings to resemble blueprint draft sheets */}
+        <div className="absolute top-8 left-8 text-[9px] font-mono text-stone-300 tracking-[0.2em] select-none pointer-events-none uppercase">Atelier Nym // Archive 01</div>
+        <div className="absolute bottom-8 right-8 text-[9px] font-mono text-stone-300 tracking-[0.2em] select-none pointer-events-none uppercase">Volume I // Philosophy</div>
+        
+        {/* Thin minimalist frame border tracing the screen edges beautifully */}
+        <div className="absolute top-6 left-6 right-6 bottom-6 border-[0.5px] border-stone-200/40 pointer-events-none z-10" />
+
+        <div className="w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 flex flex-col justify-center h-full select-none">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-            {/* Left Column: Context Editorial (col-span 7) */}
+            
+            {/* Left Column: True High-fashion Editorial Copy (col-span 7) */}
             <motion.div 
-              initial={{ opacity: 0, x: -50 }}
+              initial={{ opacity: 0, x: -60 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: false, amount: 0.15 }}
-              transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1] }}
+              viewport={{ once: false, amount: 0.2 }}
+              transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
               className="lg:col-span-7 flex flex-col items-start text-left lg:pr-8"
             >
-              <span className="font-sub text-[10px] sm:text-xs text-[#a8a29e] tracking-[0.45em] uppercase font-light mb-4 block">
-                The Essence of Nym
-              </span>
-              <h2 className="font-luxury font-light text-5xl sm:text-6xl md:text-7xl text-stone-900 tracking-[0.12em] uppercase leading-none mb-6">
-                ABOUT
+              <div className="mb-4">
+                <span className="font-sub text-[10px] sm:text-xs text-stone-400 uppercase font-light tracking-[0.45em]">
+                  <LuxuryTrackingText text="THE PHILOSOPHY OF SILENCE" fromTracking="0.25em" toTracking="0.45em" />
+                </span>
+              </div>
+
+              <h2 className="font-luxury font-light text-4xl sm:text-5xl md:text-6xl text-stone-900 leading-[1.1] mb-6">
+                <ElegantLineReveal delay={0.1}>
+                  <LuxuryRevealText text="CRAFTED IN" duration={1.6} />
+                </ElegantLineReveal>
+                <ElegantLineReveal delay={0.25}>
+                  <LuxuryRevealText text="ABSOLUTE STILLNESS" duration={1.6} className="text-[#a78b54] font-medium" />
+                </ElegantLineReveal>
               </h2>
-              <div className="w-16 h-[1px] bg-stone-300 my-6" />
-              <h3 className="font-sub text-stone-850 font-medium text-xs sm:text-sm tracking-[0.25em] uppercase leading-relaxed mb-6">
-                CRAFTED IN SILENCE, DEFINED BY SENSORY LUXURY.
+
+              <motion.div 
+                initial={{ width: 0 }}
+                whileInView={{ width: "80px" }}
+                viewport={{ once: false }}
+                transition={{ duration: 1.4, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                className="h-[1px] bg-[#bf953f] my-6" 
+              />
+
+              <h3 className="font-sub text-stone-850 font-semibold text-xs sm:text-sm tracking-[0.25em] uppercase leading-relaxed mb-6">
+                we believe true luxury whispers rather than screams.
               </h3>
-              <p className="font-sub text-stone-500 font-light text-sm sm:text-base tracking-[0.05em] leading-relaxed max-w-xl">
-                NYM is more than a perfume house — it is an expression of timeless elegance and the art of invisible luxury. Our fragrances are designed to create a bridge between the physical and the sublime, lingering as an whisper on the skin and an imprint on the memory.
+
+              <p className="font-sub text-stone-500 font-light text-sm sm:text-base tracking-[0.06em] leading-relaxed max-w-xl">
+                MAISON NYM was conceived in the quiet spaces between shadow and light. Our perfumers treat scent as an invisible canvas—weaving together volatile notes of rare minerals, dark amber, and stardust. We do not design for a crowd, we curate for the singular spirit.
               </p>
+
+              {/* Coordinates line indicator with high aesthetic touch */}
+              <div className="flex items-center gap-3 mt-8 text-[9px] text-stone-400 font-mono tracking-widest uppercase">
+                <span>LAT. 48.8566° N</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-stone-200" />
+                <span>LON. 2.3522° E</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-stone-200" />
+                <span>STUDIO IV</span>
+              </div>
             </motion.div>
 
-            {/* Right Column: Perfume Bottle Mockup (col-span 5) */}
-            <div className="lg:col-span-5 flex justify-center">
+            {/* Right Column: Editorial Portrait Mockup (col-span 5) */}
+            <div className="lg:col-span-5 flex justify-center w-full">
               <motion.div 
-                initial={{ opacity: 0, scale: 0.95, y: 35 }}
+                initial={{ opacity: 0, scale: 0.95, y: 40 }}
                 whileInView={{ opacity: 1, scale: 1, y: 0 }}
                 viewport={{ once: false, amount: 0.15 }}
-                transition={{ duration: 1.6, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
-                className="relative aspect-[4/5] w-full max-w-[380px] bg-[#fdfbfa] border border-stone-200 p-2 sm:p-3 shadow-[0_24px_50px_rgba(0,0,0,0.02)] rounded-[1px] overflow-hidden group"
+                transition={{ duration: 1.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                className="relative aspect-[4/5] w-full max-w-[360px] bg-[#fcfbfa] border border-stone-200/80 p-3 shadow-[0_24px_60px_rgba(0,0,0,0.03)] rounded-[1px] overflow-hidden group"
               >
-                <img 
-                  src={nymAboutPerfumeImg} 
-                  alt="Maison NYM Signature Perfume Presentation" 
-                  className="w-full h-full object-cover rounded-[1px] filter brightness-[0.98] contrast-[1.02] transition-transform duration-700 group-hover:scale-102"
-                  referrerPolicy="no-referrer"
-                />
-                {/* Ambient luxury glass tint overlay */}
-                <div className="absolute inset-0 bg-stone-500/[0.015] pointer-events-none" />
+                {/* Image Inside Container with subtle pan on Hover */}
+                <div className="w-full h-full overflow-hidden relative">
+                  <motion.img 
+                    src={nymAboutPerfumeImg} 
+                    alt="Maison NYM Signature Perfume Presentation" 
+                    className="w-full h-full object-cover rounded-[1px] filter brightness-[0.98] contrast-[1.01] transition-all duration-1000 group-hover:scale-[1.03] group-hover:brightness-[0.95]"
+                    referrerPolicy="no-referrer"
+                  />
+                  {/* Fine geometric layout guides on cover to reinforce architectural design */}
+                  <div className="absolute inset-x-0 bottom-4 flex justify-between px-4 z-20">
+                    <span className="text-[8px] font-mono text-white/60 tracking-widest uppercase">NYM ESSENCE N° 09</span>
+                    <span className="text-[8px] font-mono text-white/60 tracking-widest uppercase">PLATEAU III</span>
+                  </div>
+                </div>
+                {/* Delicate glass reflection effect panel */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.03] to-white/[0.08] pointer-events-none z-10" />
               </motion.div>
             </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* Editorial Luxury About Page 2: The Three Pillars & The Signature (Page 6) */}
+      <section 
+        id="about-nym-part-2" 
+        className="relative w-full h-screen bg-[#faf8f5] snap-start snap-always shrink-0 flex flex-col items-center justify-center border-t border-stone-150 z-30 overflow-hidden"
+      >
+        {/* Subtle decorative elements for that high-fashion editorial book look */}
+        <div className="absolute top-8 left-8 text-[9px] font-mono text-stone-400/70 tracking-[0.2em] select-none pointer-events-none uppercase">Atelier Nym // Archive 02</div>
+        <div className="absolute bottom-8 right-8 text-[9px] font-mono text-stone-400/70 tracking-[0.2em] select-none pointer-events-none uppercase">Volume II // Pillars</div>
+        <div className="absolute top-6 left-6 right-6 bottom-6 border-[0.5px] border-stone-300/25 pointer-events-none z-10" />
+
+        <div className="w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 flex flex-col justify-center h-full select-none">
+          {/* Section Header: Centered & Minimalist */}
+          <div className="text-center mb-10 md:mb-14 flex flex-col items-center">
+            <span className="font-sub text-[10px] sm:text-xs text-stone-400 uppercase tracking-[0.45em] mb-3 select-none">
+              <LuxuryTrackingText text="OUR FOUNDATIONAL PILLARS" fromTracking="0.25em" toTracking="0.45em" />
+            </span>
+            <h3 className="font-luxury font-light text-2xl sm:text-3xl md:text-4xl text-stone-900 tracking-[0.16em] uppercase">
+              <LuxuryRevealText text="THE SACRED METIER" duration={1.5} />
+            </h3>
+            <div className="w-8 h-[1px] bg-stone-300 my-4" />
           </div>
 
-          {/* Part 2: Three Columns Brand Pillars */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 sm:gap-16 border-t border-b border-stone-200/60 py-16">
-            {/* OUR PHILOSOPHY */}
+          {/* Majestic Three-Pillar Grid with Beautiful interactive motion cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 lg:gap-16 pb-12">
+            
+            {/* Pillar 1: THE MIND */}
             <motion.div 
-              initial={{ opacity: 0, y: 35 }}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: false, amount: 0.15 }}
-              transition={{ duration: 1.3, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-              className="flex flex-col items-center text-center px-4"
+              transition={{ duration: 1.4, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-col items-center text-center p-6 bg-white border border-stone-200/40 rounded-[2px] shadow-[0_12px_32px_rgba(0,0,0,0.01)] hover:shadow-[0_20px_48px_rgba(0,0,0,0.02)] transition-all duration-500 hover:border-stone-200 cursor-default group"
             >
-              <div className="mb-6 flex items-center justify-center p-3 rounded-full bg-stone-50 border border-stone-100">
-                <svg className="w-8 h-8 stroke-[0.75] text-stone-700" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 7h6M12 3v4M8 7h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z" />
-                  <path strokeLinecap="round" d="M10 13h4M10 17h4" />
-                </svg>
+              <div className="mb-6 flex items-center justify-center w-12 h-12 rounded-full bg-stone-50 border border-stone-200/50 group-hover:bg-[#fcfaf7] group-hover:border-[#aa771c]/30 transition-all duration-500">
+                <Compass className="w-5 h-5 stroke-[1.2] text-[#aa771c] transition-transform duration-700 group-hover:rotate-45" />
               </div>
-              <h4 className="font-luxury font-light text-lg sm:text-xl text-stone-900 tracking-[0.2em] uppercase mb-4">
-                OUR PHILOSOPHY
+              <h4 className="font-luxury font-medium text-sm sm:text-base text-stone-900 tracking-[0.25em] uppercase mb-4">
+                THE MIND
               </h4>
-              <p className="font-sub text-stone-500 font-light text-xs sm:text-sm tracking-[0.08em] leading-relaxed max-w-xs">
-                We believe true luxury whispers. Every fragrance is a story, crafted with intention and worn as a signature of individuality.
+              <p className="font-sub text-stone-500 font-light text-[11px] sm:text-xs tracking-[0.08em] leading-relaxed">
+                To create what cannot be spoken. Our scents are psychological architecture, designed to align with the unexpressed dreams of the wearer.
               </p>
             </motion.div>
 
-            {/* OUR CRAFT */}
+            {/* Pillar 2: THE CRAFT */}
             <motion.div 
-              initial={{ opacity: 0, y: 35 }}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: false, amount: 0.15 }}
-              transition={{ duration: 1.3, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-              className="flex flex-col items-center text-center px-4 md:border-l md:border-r md:border-stone-200/50"
+              transition={{ duration: 1.4, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-col items-center text-center p-6 bg-white border border-stone-200/40 rounded-[2px] shadow-[0_12px_32px_rgba(0,0,0,0.01)] hover:shadow-[0_20px_48px_rgba(0,0,0,0.02)] transition-all duration-500 hover:border-stone-200 cursor-default group"
             >
-              <div className="mb-6 flex items-center justify-center p-3 rounded-full bg-stone-50 border border-stone-100">
-                <svg className="w-8 h-8 stroke-[0.75] text-stone-700" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9 9 0 0 0 0-18 9 9 0 0 0 0 18Z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 3c-1.2 2.5-1.2 5.5 0 8 1.2-2.5 1.2-5.5 0-8ZM12 11c-1.2 2.5-1.2 5.5 0 8 1.2-2.5 1.2-5.5 0-8Z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M7 12c2.5-1.2 5.5-1.2 8 0-2.5 1.2-5.5 1.2-8 0Z" />
-                </svg>
+              <div className="mb-6 flex items-center justify-center w-12 h-12 rounded-full bg-stone-50 border border-stone-200/50 group-hover:bg-[#fcfaf7] group-hover:border-[#aa771c]/30 transition-all duration-500">
+                <Leaf className="w-5 h-5 stroke-[1.2] text-[#aa771c] transition-transform duration-700 group-hover:scale-110" />
               </div>
-              <h4 className="font-luxury font-light text-lg sm:text-xl text-stone-900 tracking-[0.2em] uppercase mb-4">
-                OUR CRAFT
+              <h4 className="font-luxury font-medium text-sm sm:text-base text-stone-900 tracking-[0.25em] uppercase mb-4">
+                THE CLAY
               </h4>
-              <p className="font-sub text-stone-500 font-light text-xs sm:text-sm tracking-[0.08em] leading-relaxed max-w-xs">
-                From the finest raw ingredients to meticulous blending, our artisans create scents that transcend time and trends.
+              <p className="font-sub text-stone-500 font-light text-[11px] sm:text-xs tracking-[0.08em] leading-relaxed">
+                We wild-harvest raw elements from extreme altitudes and volcanic terrains. Every single molecule is matured in custom concrete containers.
               </p>
             </motion.div>
 
-            {/* OUR PROMISE */}
+            {/* Pillar 3: THE PROMISE */}
             <motion.div 
-              initial={{ opacity: 0, y: 35 }}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: false, amount: 0.15 }}
-              transition={{ duration: 1.3, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className="flex flex-col items-center text-center px-4"
+              transition={{ duration: 1.4, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-col items-center text-center p-6 bg-white border border-stone-200/40 rounded-[2px] shadow-[0_12px_32px_rgba(0,0,0,0.01)] hover:shadow-[0_20px_48px_rgba(0,0,0,0.02)] transition-all duration-500 hover:border-stone-200 cursor-default group"
             >
-              <div className="mb-6 flex items-center justify-center p-3 rounded-full bg-stone-50 border border-stone-100">
-                <svg className="w-8 h-8 stroke-[0.75] text-stone-700" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 3h6M10 3v6l-4 8a2 2 0 0 0 1.7 3h8.6a2 2 0 0 0 1.7-3l-4-8V3" />
-                  <path strokeLinecap="round" d="M8.5 14h7" />
-                </svg>
+              <div className="mb-6 flex items-center justify-center w-12 h-12 rounded-full bg-stone-50 border border-stone-200/50 group-hover:bg-[#fcfaf7] group-hover:border-[#aa771c]/30 transition-all duration-500">
+                <Gem className="w-5 h-5 stroke-[1.2] text-[#aa771c] transition-transform duration-700 group-hover:scale-110" />
               </div>
-              <h4 className="font-luxury font-light text-lg sm:text-xl text-stone-900 tracking-[0.2em] uppercase mb-4">
-                OUR PROMISE
+              <h4 className="font-luxury font-medium text-sm sm:text-base text-stone-900 tracking-[0.25em] uppercase mb-4">
+                THE SOUL
               </h4>
-              <p className="font-sub text-stone-500 font-light text-xs sm:text-sm tracking-[0.08em] leading-relaxed max-w-xs">
-                To deliver timeless fragrances that evoke emotion, inspire confidence, and celebrate the art of being unforgettable.
+              <p className="font-sub text-stone-500 font-light text-[11px] sm:text-xs tracking-[0.08em] leading-relaxed">
+                Our creation stays with you forever. It acts as an anchor in time—leaving behind a luxurious trace that speaks a language of pure gold.
               </p>
             </motion.div>
+
           </div>
 
-          {/* Part 3: BEYOND SCENT Split Banner */}
+          {/* Part 3: BEYOND SCENT Split Banner integrated into part 2 elegantly */}
           <motion.div 
-            initial={{ opacity: 0, y: 45 }}
+            initial={{ opacity: 0, y: 35 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.1 }}
+            viewport={{ once: false, amount: 0.15 }}
             transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1] }}
-            className="grid grid-cols-1 lg:grid-cols-12 gap-0 w-full bg-white border border-stone-200/60 rounded-[1px] overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.015)]"
+            className="grid grid-cols-1 lg:grid-cols-12 gap-0 w-full bg-white border border-stone-200/50 rounded-[1px] overflow-hidden shadow-[0_12px_44px_rgba(0,0,0,0.01)] mt-2"
           >
-            {/* Left Image Half (col-span 5) */}
-            <div className="lg:col-span-5 h-[280px] md:h-[350px] w-full relative overflow-hidden">
+            {/* Left Image Half (col-span 4) */}
+            <div className="lg:col-span-4 h-[120px] lg:h-[180px] w-full relative overflow-hidden">
               <motion.img 
                 src={nBeyondScentImg} 
-                alt="Golden Cap Close-up" 
-                className="w-full h-full object-cover block filter brightness-[0.95]"
+                alt="Golden Cap Close-up Detail" 
+                className="w-full h-full object-cover block filter brightness-[0.88] contrast-[1.05]"
                 referrerPolicy="no-referrer"
-                initial={{ scale: 1.08 }}
+                initial={{ scale: 1.05 }}
                 whileInView={{ scale: 1 }}
                 viewport={{ once: false }}
                 transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
               />
-              {/* Subtle warm luxury tint overlay */}
-              <div className="absolute inset-0 bg-stone-900/10 pointer-events-none" />
+              <div className="absolute inset-0 bg-stone-950/20 pointer-events-none" />
             </div>
 
-            {/* Right Content Half (col-span 7) */}
+            {/* Right Content Half (col-span 8) */}
             <motion.div 
-              initial={{ opacity: 0, x: 25 }}
+              initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: false }}
-              transition={{ duration: 1.4, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-              className="lg:col-span-7 bg-[#fcfaf7] flex flex-col items-start justify-center p-8 sm:p-12 md:p-16 text-left select-none"
+              transition={{ duration: 1.4, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+              className="lg:col-span-8 bg-[#fdfcfb] flex flex-col sm:flex-row sm:items-center justify-between p-6 sm:p-10 text-left select-none gap-6"
             >
-              <h4 className="font-luxury font-light text-2xl sm:text-3xl text-stone-900 tracking-[0.16em] uppercase">
-                BEYOND SCENT
-              </h4>
-              <div className="w-12 h-[1px] bg-amber-800/60 my-5" />
-              <p className="font-sub text-stone-600 font-light text-xs sm:text-sm tracking-[0.06em] leading-relaxed mb-8 max-w-md">
-                NYM is an experience — a quiet statement of who you are. Not for everyone. Only for those who understand.
-              </p>
-              {/* Stunning cursive signoff */}
-              <span className="font-signature text-3xl md:text-4xl text-stone-400 font-normal select-none italic capitalize leading-none block">
-                Live in Essence.
-              </span>
+              <div className="flex flex-col max-w-md">
+                <span className="font-sub text-[8px] sm:text-[9.5px] text-[#aa771c] tracking-[0.35em] uppercase font-bold mb-2">
+                  THE MATTE SIGNATURE
+                </span>
+                <p className="font-sub text-stone-600 font-light text-[11px] sm:text-xs tracking-[0.06em] leading-relaxed">
+                  NYM is an ultimate sensory experience — a quiet statement of who you are. Scent remains long after speech has been forgotten.
+                </p>
+              </div>
+              <div className="flex flex-col items-start sm:items-end justify-center">
+                <span className="font-signature text-2xl sm:text-3xl text-stone-400 italic block">
+                  Live in Essence.
+                </span>
+                <span className="font-mono text-[7.5px] text-stone-300 tracking-[0.2em] uppercase mt-1">Maison Nym Atelier</span>
+              </div>
             </motion.div>
-          </motion.div>
-
-          {/* Part 4: Minimal Royal Small-Text Signature Pillars (No bulky cards/icons, dark royal style text) */}
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.1 }}
-            transition={{ duration: 1.4, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full flex justify-center mt-4 pt-10 border-t border-stone-200/50"
-          >
-            <div className="flex flex-col md:flex-row items-center justify-center gap-y-6 gap-x-10 lg:gap-x-16 text-center">
-              {/* Pillar 1 */}
-              <div className="flex flex-col items-center md:items-start select-none">
-                <div className="flex items-center gap-1.5 justify-center md:justify-start">
-                  <span className="w-1 h-1 rounded-full bg-stone-400" />
-                  <span className="font-luxury text-[9px] sm:text-[10px] tracking-[0.2em] text-stone-900 uppercase font-medium">
-                    FINEST INGREDIENTS
-                  </span>
-                </div>
-                <span className="font-sub text-[8px] sm:text-[9px] tracking-[0.12em] text-stone-500 uppercase mt-0.5 md:pl-2.5">
-                  Sourced from around the world
-                </span>
-              </div>
-
-              {/* Pillar 2 */}
-              <div className="flex flex-col items-center md:items-start md:border-l md:border-stone-200 md:pl-10 select-none">
-                <div className="flex items-center gap-1.5 justify-center md:justify-start">
-                  <span className="w-1 h-1 rounded-full bg-stone-400" />
-                  <span className="font-luxury text-[9px] sm:text-[10px] tracking-[0.2em] text-stone-900 uppercase font-medium">
-                    EXPERTLY CRAFTED
-                  </span>
-                </div>
-                <span className="font-sub text-[8px] sm:text-[9px] tracking-[0.12em] text-stone-500 uppercase mt-0.5 md:pl-2.5">
-                  Blended by master perfumers
-                </span>
-              </div>
-
-              {/* Pillar 3 */}
-              <div className="flex flex-col items-center md:items-start md:border-l md:border-stone-200 md:pl-10 select-none">
-                <div className="flex items-center gap-1.5 justify-center md:justify-start">
-                  <span className="w-1 h-1 rounded-full bg-stone-400" />
-                  <span className="font-luxury text-[9px] sm:text-[10px] tracking-[0.2em] text-stone-900 uppercase font-medium">
-                    TIMELESS ELEGANCE
-                  </span>
-                </div>
-                <span className="font-sub text-[8px] sm:text-[9px] tracking-[0.12em] text-stone-500 uppercase mt-0.5 md:pl-2.5">
-                  Designed for impression
-                </span>
-              </div>
-
-              {/* Pillar 4 */}
-              <div className="flex flex-col items-center md:items-start md:border-l md:border-stone-200 md:pl-10 select-none">
-                <div className="flex items-center gap-1.5 justify-center md:justify-start">
-                  <span className="w-1 h-1 rounded-full bg-stone-400" />
-                  <span className="font-luxury text-[9px] sm:text-[10px] tracking-[0.2em] text-stone-900 uppercase font-medium">
-                    AUTHENTIC LUXURY
-                  </span>
-                </div>
-                <span className="font-sub text-[8px] sm:text-[9px] tracking-[0.12em] text-stone-500 uppercase mt-0.5 md:pl-2.5">
-                  Quality to feel & wear
-                </span>
-              </div>
-            </div>
           </motion.div>
 
         </div>
@@ -1112,13 +1267,13 @@ export default function App() {
           className="flex flex-col items-center text-center max-w-4xl select-none"
         >
           {/* Elegant luxury Maison category subtitle */}
-          <span className="font-sub text-[10px] sm:text-xs text-stone-400 tracking-[0.45em] uppercase font-light mb-5 block">
-            The Atelier Enquiries
+          <span className="font-sub text-[10px] sm:text-xs text-stone-400 uppercase font-light mb-5 block">
+            <LuxuryTrackingText text="THE ATELIER ENQUIRIES" fromTracking="0.25em" toTracking="0.45em" />
           </span>
 
           {/* Main Title 'CONTACT' in editorial luxury Serif */}
           <h2 className="font-luxury font-light text-4xl sm:text-5xl md:text-6xl lg:text-[3.5rem] text-stone-900 tracking-[0.15em] leading-tight uppercase">
-            CONTACT
+            <LuxuryRevealText text="CONTACT" delay={0.15} />
           </h2>
 
           <motion.div 
@@ -1158,11 +1313,441 @@ export default function App() {
         </>
       ) : (
         <>
+          {/* Magnificent Full-Bleed Campaign Hero Screen (Page-sized, 125vh, matches main first page scale and device scaling) */}
+          {activeCategory === "men" && (
+            <>
+              <section className="relative w-full h-[125vh] bg-[#090807] overflow-hidden select-none z-20 border-b border-stone-850 flex flex-col justify-center items-center">
+                {/* Subtle architectural markings resembling blueprint sketches */}
+                <div className="absolute top-8 left-8 text-[9px] font-mono text-stone-500/80 tracking-[0.25em] uppercase pointer-events-none select-none">Maison Nym // Men Campaign</div>
+                <div className="absolute top-8 right-8 text-[9px] font-mono text-stone-500/80 tracking-[0.25em] uppercase pointer-events-none select-none">Plateau III // SC-2026</div>
+
+                {/* Floating Back to Main action inside campaign hero so user doesn't have to scroll */}
+                <div className="absolute top-10 left-6 md:left-16 z-30">
+                  <button
+                    onClick={triggerBackToMainTransition}
+                    className="px-5 py-2.5 rounded-full border border-slate-700/60 bg-[#090807]/80 backdrop-blur-md text-slate-300 font-mono text-[9px] tracking-[0.25em] uppercase hover:bg-slate-800/40 hover:text-white hover:border-slate-500 transition-all duration-300 shadow-[0_8px_24px_rgba(0,0,0,0.5)] cursor-pointer flex items-center justify-center gap-2 font-medium"
+                  >
+                    <span>←</span>
+                    <span>Back to Main</span>
+                  </button>
+                </div>
+
+                {/* High-res media cover (Automated Video on laptops, Original Photograph on mobiles/tablets) */}
+                <div className="absolute inset-0 bg-[#090807]">
+                  {/* Laptop/Desktop Vertical Video Loop */}
+                  <video
+                    ref={campaignHeroVideoRef}
+                    src="https://v1.pinimg.com/videos/iht/expMp4/92/27/45/92274529404149bf51dd307ef4eaf4cd_720w.mp4"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    referrerPolicy="no-referrer"
+                    className="hidden md:block w-full h-full object-cover object-center filter brightness-[0.92] contrast-[1.01]"
+                  />
+
+                  {/* Mobile/Tablet Original Photograph Cover */}
+                  <motion.img 
+                    src="https://res.cloudinary.com/dilgatlft/image/upload/v1779755687/ChatGPT_Image_May_26_2026_06_03_54_AM_f9lumv.png"
+                    alt="Sensory Coud Iconic Men Campaign"
+                    className="block md:hidden w-full h-full object-cover object-center"
+                    initial={{ scale: 1.05, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
+                    referrerPolicy="no-referrer"
+                  />
+
+                  {/* Minimal protective overlays at top/bottom for readability, keeping maximum central original brightness */}
+                  <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-[#090807]/90 via-[#090807]/30 to-transparent z-10 pointer-events-none" />
+                  <div className="absolute inset-x-0 top-0 h-1/4 bg-gradient-to-b from-black/40 to-transparent z-10 pointer-events-none" />
+                </div>
+
+                {/* Dynamic Center Typography */}
+                <div className="relative z-20 text-center px-6 max-w-4xl flex flex-col items-center">
+                  <span className="font-mono text-[10px] sm:text-xs text-[#aa771c] tracking-[0.45em] uppercase mb-4 block">
+                    <LuxuryTrackingText text="LA COLLECTION ESSENTIELLE" fromTracking="0.25em" toTracking="0.45em" />
+                  </span>
+                  <h1 className="font-luxury font-light text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-white tracking-[0.22em] uppercase leading-none mb-6 flex flex-col items-center gap-1 sm:gap-2 translate-y-6 md:translate-y-8">
+                    <span className="block">
+                      <LuxuryRevealText text="PERFECTION" duration={1.8} />
+                    </span>
+                    <span className="block mt-2 sm:mt-3">
+                      <LuxuryRevealText text="PURITY" duration={1.8} />
+                    </span>
+                  </h1>
+                  <div className="w-20 h-[0.5px] bg-[#bf953f] my-6 translate-y-6 md:translate-y-8" />
+                  <p className="font-signature text-2xl md:text-3xl text-slate-300/90 mt-2 select-none capitalize translate-y-6 md:translate-y-8">
+                    sculpted in shadow, captured in gold
+                  </p>
+                  
+                  {/* Scroll hint Indicator */}
+                  <motion.div 
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: [0.3, 1, 0.3], y: [0, 8, 0] }}
+                    transition={{ repeat: Infinity, duration: 2.5 }}
+                    className="mt-16 flex flex-col items-center gap-2"
+                  >
+                    <span className="font-mono text-[8px] tracking-[0.3em] text-stone-400 uppercase">Scroll to Discover</span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#bf953f]" />
+                  </motion.div>
+                </div>
+              </section>
+
+              {/* Pristine Modernist White Page section (just slightly larger than half page: 65vh) */}
+              <section className="relative w-full h-[65vh] min-h-[460px] bg-[#faf9f6] text-stone-900 overflow-hidden flex flex-col justify-center items-center z-20 border-b border-stone-200 px-6 sm:px-12 md:px-24">
+                {/* Clean structural indicators resembling perfume house logs */}
+                <div className="absolute top-8 left-8 text-[8px] font-mono text-stone-400/85 tracking-[0.22em] uppercase select-none pointer-events-none">
+                  Atelier Formulation // Serie 018
+                </div>
+                <div className="absolute top-8 right-8 text-[8px] font-mono text-stone-400/85 tracking-[0.22em] uppercase select-none pointer-events-none">
+                  Maison Nym — Paris
+                </div>
+
+                <div className="max-w-3xl mx-auto text-center flex flex-col items-center">
+                  <motion.span 
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: false, amount: 0.3 }}
+                    transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+                    className="font-mono text-[9px] md:text-[10.5px] text-[#aa771c] tracking-[0.45em] uppercase block mb-4"
+                  >
+                    THE OLFACTORY ANALYSIS
+                  </motion.span>
+                  
+                  <motion.h2 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: false, amount: 0.3 }}
+                    transition={{ duration: 1.4, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+                    className="font-luxury text-2xl sm:text-3xl md:text-4xl text-stone-950 tracking-[0.18em] uppercase font-light leading-snug"
+                  >
+                    Minimalist Perfection & Raw Clarity
+                  </motion.h2>
+
+                  <motion.div 
+                    initial={{ width: 0 }}
+                    whileInView={{ width: "40px" }}
+                    viewport={{ once: false }}
+                    transition={{ duration: 1.2, delay: 0.2 }}
+                    className="h-[0.5px] bg-stone-300 my-6 sm:my-8" 
+                  />
+
+                  <motion.p 
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: false, amount: 0.3 }}
+                    transition={{ duration: 1.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                    className="font-sub text-stone-600 font-light text-[11px] sm:text-xs md:text-sm tracking-[0.06em] leading-relaxed max-w-2xl"
+                  >
+                    Perfection Purity represents the absolute threshold of perfume design at Maison Nym. 
+                    Built on cold-pressed Himalayan bergamot, hand-sorted white iris concrete, and dry white woods, 
+                    this fragrance evokes the crisp silence of alpine dawn. It does not speak to be noticed; 
+                    it resides as a quiet, eternal witness to pristine elegance.
+                  </motion.p>
+                  
+                  {/* Fine note elements display */}
+                  <div className="grid grid-cols-3 gap-4 sm:gap-12 mt-8 sm:mt-12 w-full max-w-lg">
+                    <motion.div 
+                      initial={{ opacity: 0, y: 10 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: false }}
+                      transition={{ duration: 1.2, delay: 0.3 }}
+                      className="text-center"
+                    >
+                      <span className="font-mono text-[8px] tracking-[0.2em] text-stone-400 block mb-1">TOP NOTE</span>
+                      <span className="font-luxury text-[10px] tracking-[0.15em] text-stone-800 uppercase font-medium">alba bergamot</span>
+                    </motion.div>
+                    <motion.div 
+                      initial={{ opacity: 0, y: 10 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: false }}
+                      transition={{ duration: 1.2, delay: 0.4 }}
+                      className="text-center"
+                    >
+                      <span className="font-mono text-[8px] tracking-[0.2em] text-stone-400 block mb-1">HEART NOTE</span>
+                      <span className="font-luxury text-[10px] tracking-[0.15em] text-stone-800 uppercase font-medium">white iris concrete</span>
+                    </motion.div>
+                    <motion.div 
+                      initial={{ opacity: 0, y: 10 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: false }}
+                      transition={{ duration: 1.2, delay: 0.5 }}
+                      className="text-center"
+                    >
+                      <span className="font-mono text-[8px] tracking-[0.2em] text-stone-400 block mb-1">BASE NOTE</span>
+                      <span className="font-luxury text-[10px] tracking-[0.15em] text-stone-800 uppercase font-medium">white cedarwood</span>
+                    </motion.div>
+                  </div>
+                </div>
+
+                {/* Subtle visual bottom anchor accent */}
+                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full border border-stone-300" />
+              </section>
+
+              {/* High-fidelity full-bleed atmosphere image section capturing Perfection Purity art */}
+              <section className="relative w-full h-[115vh] bg-[#090807] overflow-hidden select-none z-20 border-b border-stone-850 flex flex-col justify-center items-center">
+                <div className="absolute inset-0 bg-[#090807]">
+                  <motion.img 
+                    src="https://res.cloudinary.com/dilgatlft/image/upload/v1779772894/ChatGPT_Image_May_26_2026_10_48_56_AM_gut8yq.png"
+                    alt="Perfection Purity Campaign Atmosphere"
+                    className="w-full h-full object-cover object-center filter brightness-[0.94] contrast-[1.01]"
+                    initial={{ scale: 1.04, opacity: 0 }}
+                    whileInView={{ scale: 1, opacity: 1 }}
+                    viewport={{ once: true, amount: 0.15 }}
+                    transition={{ duration: 2.0, ease: [0.16, 1, 0.3, 1] }}
+                    referrerPolicy="no-referrer"
+                  />
+                  {/* Subtle cinematic overlays for seamless transition and typography readability */}
+                  <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#090807] via-[#090807]/20 to-transparent z-10 pointer-events-none" />
+                  <div className="absolute inset-x-0 top-0 h-1/4 bg-gradient-to-b from-black/45 to-transparent z-10 pointer-events-none" />
+                </div>
+
+                {/* Elegant subtle metadata positioned at bottom margins */}
+                <div className="absolute bottom-12 left-6 sm:left-12 md:left-24 z-20 pointer-events-none text-left">
+                  <span className="font-mono text-[9px] text-[#bf953f] tracking-[0.35em] uppercase block mb-1">
+                    CAMPAIGN CAPTURE // ATELIER
+                  </span>
+                  <h3 className="font-luxury text-stone-100 text-xs sm:text-sm tracking-[0.18em] uppercase font-light">
+                    Maison Nym — Perfection Purity
+                  </h3>
+                </div>
+              </section>
+
+              {/* Le Tabac - 3 Tobacco-themed Perfumes collection (Luxurious White Page Layout) */}
+              <section className="relative w-full py-24 bg-[#faf9f6] text-stone-900 z-20 border-b border-stone-200/80 overflow-hidden flex flex-col justify-center items-center px-6 sm:px-12 md:px-24">
+                {/* Visual subtle grids/decorations for light page */}
+                <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-stone-200 to-transparent pointer-events-none" />
+                
+                {/* Immersive Tobacco Leaf Artwork Banner (Exactly matching the user's uploaded inspiration) */}
+                <div className="relative w-full max-w-5xl h-[45vh] min-h-[300px] rounded-2xl overflow-hidden mb-16 shadow-[0_24px_55px_rgba(27,25,23,0.12)] group/banner">
+                  <img 
+                    src={tobaccoLeavesTexture}
+                    alt="Premium Tobacco Leaves Texture"
+                    className="w-full h-full object-cover object-center transition-transform duration-[2.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/banner:scale-105"
+                  />
+                  {/* Subtle dark overlays representing the high-contrast professional photograph */}
+                  <div className="absolute inset-0 bg-black/40 pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/15 via-black/30 to-black/50 pointer-events-none" />
+                  
+                  {/* Centered Serif Display Text - Tobacco */}
+                  <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-6 select-none">
+                    <span className="font-mono text-[9px] sm:text-[10px] text-[#bf953f] tracking-[0.45em] uppercase mb-4 block">
+                      LE TABAC SÉLECTION UNIQUE
+                    </span>
+                    <h2 className="font-luxury text-white text-5xl sm:text-6xl md:text-7xl lg:text-8xl tracking-[0.08em] font-light uppercase filter drop-shadow-[0_4px_16px_rgba(0,0,0,0.55)] leading-none">
+                      Tobacco
+                    </h2>
+                    <div className="w-16 h-[0.5px] bg-[#bf953f]/80 mt-6" />
+                  </div>
+                </div>
+
+                {/* Section Header Description */}
+                <div className="max-w-2xl mx-auto text-center flex flex-col items-center mb-16">
+                  <h3 className="font-mono text-[9.5px] md:text-[10.5px] text-[#aa771c] tracking-[0.4em] uppercase block mb-3">
+                    THREE EXQUISITE FRAGRANCES
+                  </h3>
+                  <p className="font-sans text-stone-500 font-light text-xs md:text-sm tracking-[0.05em] leading-relaxed max-w-xl">
+                    A limited scent trilogy celebrating smoked amber, aromatic golden leaves, and dense resins. Reimagined for extreme physical longevity and pristine structural character on a pristine white canvas.
+                  </p>
+                </div>
+
+                {/* 3 Perfumes Grid (Light Premium Theme Cards) */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-6xl relative z-10">
+                  {[
+                    {
+                      name: "TABAC BRUT",
+                      price: "$58",
+                      spec: "No. 07 // Raw Smoked Extrait",
+                      concentration: "22% Extrait de Parfum",
+                      character: "Intense, Dry, Leather-tinged, Raw-leaf complex",
+                      sillage: "9.2 / 10",
+                      longevity: "12+ Hours (Heavy)",
+                      notes: ["Kentucky Tobacco", "Raw Forest Honey", "Charred Oakwood"],
+                      batch: "BATCH #TBC-01",
+                      extraction: "CO2 Supercritical Extraction",
+                      vol: "100ml / 3.4 FL.OZ.",
+                      liquidColor: "bg-amber-600/[0.04] border-amber-600/15",
+                      image: tabacBrutImg
+                    },
+                    {
+                      name: "SMOKED CHERISE",
+                      price: "$64",
+                      spec: "No. 12 // Honeyed Cherry-Pipe Unique",
+                      concentration: "25% Intense Parfum",
+                      character: "Seductive, Warm, Dark-fruity, Ambery-depth",
+                      sillage: "8.7 / 10",
+                      longevity: "10+ Hours (Moderate-Heavy)",
+                      notes: ["Sweet Shag Tobacco", "Morello Black Cherry", "Smoked Vetiver"],
+                      batch: "BATCH #TBC-12",
+                      extraction: "Steam Distillation & Enfleurage",
+                      vol: "100ml / 3.4 FL.OZ.",
+                      liquidColor: "bg-red-950/[0.04] border-red-900/15",
+                      image: smokedCheriseImg
+                    },
+                    {
+                      name: "VELOURS BLOND",
+                      price: "$68",
+                      spec: "No. 05 // Powdery Blonde Velvet",
+                      concentration: "20% Esprit de Parfum",
+                      character: "Refined, Creamy, Close-proximity, Subtle warmth",
+                      sillage: "8.1 / 10",
+                      longevity: "8+ Hours (Skin scent-Seductive)",
+                      notes: ["Blonde Tobacco Blossom", "Cashmere Accord", "Sandalwood Incense"],
+                      batch: "BATCH #TBC-05",
+                      extraction: "Cold Absolute Maceration",
+                      vol: "100ml / 3.4 FL.OZ.",
+                      liquidColor: "bg-amber-100/[0.08] border-amber-200/20",
+                      image: veloursBlondImg
+                    }
+                  ].map((p, idx) => (
+                    <motion.div
+                      key={p.name}
+                      initial={{ opacity: 0, y: 30 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, amount: 0.1 }}
+                      transition={{ duration: 1.0, delay: idx * 0.15, ease: [0.16, 1, 0.3, 1] }}
+                      className="group relative rounded-xl border border-stone-200 bg-white p-6 sm:p-8 flex flex-col justify-between hover:border-[#bf953f]/50 transition-all duration-500 hover:shadow-[0_20px_50px_rgba(27,25,23,0.06)] overflow-hidden"
+                    >
+                      {/* Batch tag overlay */}
+                      <div className="absolute top-0 right-0 p-4 font-mono text-[9px] text-[#aa771c]/60 tracking-widest">{p.batch}</div>
+                      
+                      <div className="flex flex-col">
+                        {/* High-Fidelity Professional Perfume Art Capture */}
+                        <div className="w-full flex justify-center py-4">
+                          <div className="relative w-48 h-48 sm:w-52 sm:h-52 rounded-xl overflow-hidden shadow-[0_12px_24px_rgba(27,25,23,0.05)] border border-stone-150 bg-[#faf9f6] flex items-center justify-center group-hover:shadow-[0_20px_40px_rgba(27,25,23,0.1)] transition-all duration-500">
+                            <img 
+                              src={p.image} 
+                              alt={`${p.name} Perfume Bottle`} 
+                              className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
+                              referrerPolicy="no-referrer"
+                            />
+                            {/* Fine gold border detail */}
+                            <div className="absolute inset-2 border border-[#bf953f]/20 pointer-events-none rounded-lg" />
+                          </div>
+                        </div>
+
+                        {/* Details */}
+                        <div className="mt-4">
+                          <span className="font-mono text-[8.5px] text-[#aa771c] bg-[#bf953f]/10 px-2 py-0.5 rounded tracking-widest uppercase inline-block mb-2 font-medium">
+                            {p.concentration}
+                          </span>
+                          <h3 className="font-luxury text-xl text-stone-900 tracking-[0.1em] uppercase font-light mt-1">
+                            {p.name}
+                          </h3>
+                          <div className="flex items-baseline gap-2 mt-2">
+                            <span className="font-sans text-xl text-[#9a7633] font-semibold">{p.price}</span>
+                            <span className="font-mono text-[9px] text-stone-400 tracking-wider uppercase">USD</span>
+                          </div>
+                        </div>
+
+                        {/* "Hard Characters" (Detailed perfume scientific specs) */}
+                        <div className="mt-6 border-t border-stone-100 pt-4 space-y-2.5">
+                          <div>
+                            <span className="font-mono text-[8px] text-stone-400 tracking-widest block uppercase">OLFACTORY PROFILE</span>
+                            <p className="font-sans text-[11px] text-stone-700 font-light mt-0.5">{p.character}</p>
+                          </div>
+                          <div className="grid grid-cols-2 gap-2">
+                            <div>
+                              <span className="font-mono text-[8px] text-stone-400 tracking-widest block uppercase">SILLAGE INDEX</span>
+                              <p className="font-sans text-[10px] text-[#aa771c] font-mono mt-0.5">{p.sillage}</p>
+                            </div>
+                            <div>
+                              <span className="font-mono text-[8px] text-stone-400 tracking-widest block uppercase">LONGEVITY</span>
+                              <p className="font-sans text-[11px] text-stone-700 font-light mt-0.5">{p.longevity}</p>
+                            </div>
+                          </div>
+                          <div>
+                            <span className="font-mono text-[8px] text-stone-400 tracking-widest block uppercase">OLFACTORY TRIAD</span>
+                            <div className="flex flex-wrap gap-1 mt-1">
+                              {p.notes.map((n) => (
+                                <span key={n} className="font-mono text-[7.5px] bg-stone-50 text-stone-600 border border-stone-200/70 px-1.5 py-0.5 rounded">
+                                  {n}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Luxurious action button */}
+                      <button className="mt-8 w-full py-3 rounded bg-stone-950 hover:bg-[#aa771c] text-white font-mono text-[9px] tracking-[0.25em] uppercase transition-all duration-300 hover:shadow-lg cursor-pointer">
+                        ORDER HANDMADE EXPERIENCE
+                      </button>
+                    </motion.div>
+                  ))}
+                </div>
+
+                {/* Footnote about craft */}
+                <div className="mt-16 text-center max-w-lg">
+                  <p className="font-mono text-[8px] text-stone-400/80 tracking-[0.25em] uppercase select-none pointer-events-none leading-relaxed">
+                    UNCOMPROMISING METIER // EACH BOTTLE HAND-BLOWN AND WAX-SEALED // SHIPPED IN EMBOSSED ASHWOOD COFFRETS
+                  </p>
+                </div>
+              </section>
+            </>
+          )}
+
+          {activeCategory === "women" && (
+            <section className="relative w-full h-[125vh] bg-[#090807] overflow-hidden select-none z-20 border-b border-stone-850 flex flex-col justify-center items-center">
+              <div className="absolute top-8 left-8 text-[9px] font-mono text-stone-500/80 tracking-[0.25em] uppercase pointer-events-none select-none">Maison Nym // Women Campaign</div>
+              <div className="absolute top-8 right-8 text-[9px] font-mono text-stone-500/80 tracking-[0.25em] uppercase pointer-events-none select-none">Plateau I // SC-2026</div>
+
+              <div className="absolute top-10 left-6 md:left-16 z-30">
+                <button
+                  onClick={triggerBackToMainTransition}
+                  className="px-5 py-2.5 rounded-full border border-slate-700/60 bg-[#090807]/80 backdrop-blur-md text-slate-300 font-mono text-[9px] tracking-[0.25em] uppercase hover:bg-slate-800/40 hover:text-white hover:border-slate-500 transition-all duration-300 shadow-[0_8px_24px_rgba(0,0,0,0.5)] cursor-pointer flex items-center justify-center gap-2 font-medium"
+                >
+                  <span>←</span>
+                  <span>Back to Main</span>
+                </button>
+              </div>
+
+              <div className="absolute inset-0">
+                <motion.img 
+                  src="https://images.unsplash.com/photo-1547887537-6158d64c35b3?q=80&w=1600&auto=format&fit=crop"
+                  alt="Sensory Elegance Iconic Women Campaign"
+                  className="w-full h-full object-cover object-center filter brightness-[0.78] contrast-[1.05]"
+                  initial={{ scale: 1.1, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 2.2, ease: [0.16, 1, 0.3, 1] }}
+                  referrerPolicy="no-referrer"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#090807] via-black/10 to-transparent z-10" />
+                <div className="absolute inset-0 bg-gradient-to-b from-[#090807]/80 via-transparent to-[#090807]/70 z-10" />
+                <div className="absolute inset-0 bg-black/15 z-10" />
+              </div>
+
+              <div className="relative z-20 text-center px-6 max-w-4xl flex flex-col items-center">
+                <span className="font-mono text-[10px] sm:text-xs text-[#aa771c] tracking-[0.45em] uppercase mb-4 block">
+                  <LuxuryTrackingText text="LA COLLECTION IMPÉRIALE" fromTracking="0.25em" toTracking="0.45em" />
+                </span>
+                <h1 className="font-luxury font-light text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-white tracking-[0.22em] uppercase leading-none mb-6">
+                  <LuxuryRevealText text="AMBRE SOLEIL" duration={1.8} />
+                </h1>
+                <div className="w-20 h-[0.5px] bg-[#bf953f] my-4" />
+                <p className="font-signature text-2xl md:text-3xl text-slate-300/90 mt-2 select-none capitalize">
+                  forged in absolute light, lived in whispers
+                </p>
+                
+                <motion.div 
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: [0.3, 1, 0.3], y: [0, 8, 0] }}
+                  transition={{ repeat: Infinity, duration: 2.5 }}
+                  className="mt-16 flex flex-col items-center gap-2"
+                >
+                  <span className="font-mono text-[8px] tracking-[0.3em] text-stone-400 uppercase">Scroll to Discover</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#bf953f]" />
+                </motion.div>
+              </div>
+            </section>
+          )}
+
           {/* Pristine Luxury Section 3 (Brutalist matte slate gallery of 6 individual perfumes on their own rustic rock plates) */}
-          <section 
-            id="white-empty-page" 
-            className="relative w-full min-h-[200vh] h-auto bg-[#090807] px-6 md:px-16 py-28 select-none overflow-hidden"
-          >
+          {activeCategory === "women" && (
+            <section 
+              id="white-empty-page" 
+              className="relative w-full min-h-[200vh] h-auto bg-[#090807] px-6 md:px-16 py-28 select-none overflow-hidden"
+            >
             {/* Subtle Matte Mineral Background Texture Overlay */}
             <div className="absolute inset-0 z-0 pointer-events-none opacity-20 overflow-hidden">
               <img 
@@ -1189,20 +1774,22 @@ export default function App() {
 
         {/* Section Header */}
         <div className="relative z-10 text-center mb-16 max-w-xl mx-auto">
-          <span className="font-mono text-[9px] md:text-[10px] text-slate-400/60 tracking-[0.4em] uppercase block mb-3">
-            La Collection Privée
+          <span className="font-mono text-[9px] md:text-[10px] text-slate-400/60 uppercase block mb-3">
+            <LuxuryTrackingText text="LA COLLECTION PRIVÉE" fromTracking="0.25em" toTracking="0.4em" />
           </span>
-          <h2 
-            className="font-luxury text-3xl md:text-4xl lg:text-5xl font-light tracking-[0.2em] uppercase"
-            style={{
-              backgroundImage: "linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #64748b 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              filter: "drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.8))"
-            }}
-          >
-            The Minerals
-          </h2>
+          <ElegantLineReveal>
+            <h2 
+              className="font-luxury text-3xl md:text-4xl lg:text-5xl font-light tracking-[0.2em] uppercase"
+              style={{
+                backgroundImage: "linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #64748b 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                filter: "drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.8))"
+              }}
+            >
+              The Minerals
+            </h2>
+          </ElegantLineReveal>
           <p className="font-signature text-xl md:text-2xl text-slate-400/80 mt-3 capitalize">
             sculpted by nature, captured in matte grey slate
           </p>
@@ -1354,9 +1941,10 @@ export default function App() {
             </span>
           </motion.div>
         </div>
-      </section>
-    </>
-  )}
+            </section>
+          )}
+        </>
+      )}
 
       {/* Campaign Story Modal popup (AnimatePresence) */}
       <AnimatePresence>
